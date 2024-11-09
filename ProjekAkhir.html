@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ready to Go Yogyakarta</title>
+    <style>
+        /* Reset dan styling umum */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-image: url('images/home.jpg'); 
+            background-size: cover;
+            background-position: center; 
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            color: #000000;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+        
+        header {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex; 
+            justify-content: space-between; 
+            gap: 30px; 
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: color 0.3s, transform 0.3s;
+        }
+        
+        nav a:hover {
+            color: #A8DADC; 
+            transform: translateY(-2px);
+        }
+
+        header .title {
+            font-size: 34px;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #ffffff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 10px 0;
+            min-width: 200px;
+            z-index: 10;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #000000;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #A8DADC;
+            color: #fff;
+        }
+
+        .dropdown-menu a:active {
+            background-color: #457B9D; 
+        }
+
+        .dropdown::after {
+            content: '▼';
+            margin-left: 8px;
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        main {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 30px;
+            padding: 0 20px;
+            flex-grow: 1;
+        }
+
+        .content {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+            border-radius: 40%;
+            border: 6px solid white;
+            padding: 6px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        aside {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+
+        footer {
+            width: 100%;
+            padding: 10px;
+            color: white;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .button {
+            padding: 12px 30px;
+            background-color: #A8DADC;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .button:hover {
+            background-color: #457B9D;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 150px;
+        }
+
+        /* Menambahkan gaya untuk kotak foto destinasi trip */
+        .trip-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; /* Spasi antar gambar */
+            margin-top: 30px;
+        }
+
+        /* Styling untuk setiap kotak foto trip */
+        .trip-item {
+            position: relative;
+            overflow: hidden; /* Agar gambar tidak keluar dari batas kotak */
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .trip-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Gambar mengisi kotak dengan proporsional */
+            transition: transform 0.3s ease;
+        }
+
+        /* Efek zoom saat di-hover */
+        .trip-item:hover img {
+            transform: scale(1.1); 
+        }
+
+        /* Nama tempat di bawah gambar */
+        .trip-item .title {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.6); 
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Efek saat klik gambar */
+        .trip-item:active img {
+            transform: scale(1.2); /* Saat gambar diklik, diperbesar */
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Menambahkan transparansi pada Food, Art, dan Destination */
+        #trip-section, #Foods-section, #art-section {
+            background-color: rgba(255, 255, 255, 0.464); 
+        }
+
+        /* Transparansi untuk Home Section */
+        #home-section {
+            background-color: rgba(255, 255, 255, 0.607); 
+            color: #000000; 
+        }
+
+        /* Judul dan paragraf dalam Home Section */
+        #home-section h1, #home-section p {
+            color: #000000; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="title">YOGYAKARTA.ID</div>
+        <nav>
+            <a href="#" onclick="showContent('home-section')">Home</a>
+            <div class="dropdown">
+                <a href="#">Explore</a>
+                <div class="dropdown-menu">
+                    <a href="#" onclick="showContent('trip-section')">Destinations</a>
+                    <a href="#" onclick="showContent('Foods-section')">Foods</a>
+                    <a href="#" onclick="showContent('art-section')">Art</a>
+                </div>
+            </div>
+            <a href="#" onclick="showContent('feedback-section')">Feedback</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section class="content active" id="home-section">
+            <img src="images/LogoJogja.png" alt="Logo Yogyakarta" class="logo">
+            <h1>Welcome to Yogyakarta</h1>
+            <p>Yogyakarta Special Region, abbreviated DIY, is a Special Region (a special province in Indonesia) 
+                which is a fusion of the Sultanate of Yogyakarta and the Duchy of Paku Alaman with the capital city of Yogyakarta. 
+                The Special Region of Yogyakarta is located in the southern part of Java Island, and borders Central Java Province 
+                and the Indian Ocean. This Special Region, which has an area of ​​3,185.80 km2, consists of one city and four districts. According 
+                to the 2010 population census, it has a population of 3,452,390 people with a proportion of 1,705,404 men and 1,746,986 women, 
+                and has a population density of 1,084 people per km2.</p>
+            <p>There's much more to explore in Jogja. Clink button bellow for more insights!</p>
+            <a href="#" class="button" onclick="showContent('content-section')">Learn More</a>
+        </section>
+
+        <!--Learn More Section-->
+        <section class="content" id="content-section">
+            <h1>Learn More About Yogyakarta</h1>
+            
+            <!-- Kotak untuk Visi -->
+            <div class="info-box">
+                <h3>Vision of Special Region of Yogyakarta</h3>
+                <p>Yogyakarta has become a city that excels in the fields of culture, tourism, and education, 
+                    by blending tradition and sustainable innovation for the well-being of its people.</p>
+            </div>
+            
+            <!-- Kotak untuk Misi -->
+            <div class="info-box">
+                <h3>Mission of Special Region of Yogyakarta</h3>
+                <ul>
+                    <li>Enhance the quality of life of the community through the development of the tourism and culture sectors.</li>
+                    <li>Preserve and promote the unique local culture of Yogyakarta to the world.</li>
+                    <li>Encourage innovation in the education sector to create competent human resources.</li>
+                    <li>Become a world-class tourist destination that is friendly and safe for visitors.</li>
+                </ul>
+            </div>
+            
+            <a href="#" class="button" onclick="showContent('home-section')">Back to Home</a>
+        </section>
+        
+
+        <!-- trip Section -->
+        <section class="content" id="trip-section">
+            <h1>Top Tourist Destinations in Yogyakarta</h1>
+            <p>As the cultural heart of Java, Yogyakarta offers a wealth of captivating destinations 
+                that showcase the region's rich history, stunning architecture, and vibrant traditions. 
+                From ancient temple complexes to lively markets, here are the top attractions that should 
+                be on every visitor's Yogyakarta itinerary.</p>
+            
+            <div class="trip-gallery">
+                <div class="trip-item">
+                    <img src="images/kraton.jpg" alt="Keraton Yogyakarta">
+                    <div class="title">Keraton Yogyakarta</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/malioboro.jpg" alt="Malioboro">
+                    <div class="title">Malioboro</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/parangtritis.jpg" alt="Parangtritis Beach">
+                    <div class="title">Parangtritis Beach</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/prambanan.jpg" alt="Prambanan Temple">
+                    <div class="title">Prambanan Temple</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/pantaikesirat.jpg" alt="Kesirat Beach">
+                    <div class="title">Kesirat Beach</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/pantaikukup.jpg" alt="Kukup Beach">
+                    <div class="title">Kukup Beach</div>
+                </div>
+            </div>
+
+            <a href="#" class="button" onclick="showContent('home-section')">Back to Home</a>
+        </section>
+
+        <!-- Foods Section -->
+        <section class="content" id="Foods-section">
+            <h1>Yogyakarta's Delicious Culinary</h1>
+            <p>As the cultural heart of Java, Yogyakarta has long been revered for its 
+                mouthwatering cuisine that beautifully blends traditional recipes with 
+                modern influences. From iconic local dishes to tantalizing street food, 
+                a culinary adventure in this captivating city promises to delight the senses 
+                and leave a lasting impression on your palate.</p>
+            <div class="trip-gallery">
+                <div class="trip-item">
+                    <img src="images/gudeg.jpg" alt="Gudeg">
+                    <div class="title">Gudeg</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/bakpia.jpg" alt="Bakpia">
+                    <div class="title">Bakpia</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/sateklatak.jpg" alt="Sate Klatak">
+                    <div class="title">Sate Klatak</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/apem.jpeg" alt="Apem">
+                    <div class="title">Apem</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/yangko.png" alt="Yangko">
+                    <div class="title">Yangko</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/geplak.jpg" alt="Geplak">
+                    <div class="title">Geplak</div>
+                </div>
+            </div>
+            <a href="#" class="button" onclick="showContent('home-section')">Back to Home</a>
+        </section>
+
+        <!-- Art Section -->
+        <section class="content" id="art-section">
+            <h1>Yogyakarta's Art & Culture</h1>
+            <p>The city of Yogyakarta is one of the centers for preserving Javanese culture, 
+                especially the Yogyakarta style. Yogyakarta style Javanese culture has its own 
+                characteristics compared to Javanese cultural styles in other areas. This is due 
+                to the existence of the Yogyakarta Sultanate which chose to maintain the pure 
+                Javanese culture that had existed since the time of the Mataram Sultanate during the Jatisari Agreement.</p>
+            <div class="trip-gallery">
+                <div class="trip-item">
+                    <img src="images/batik.jpg" alt="Batik">
+                    <div class="title">Batik</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/wayang.jpg" alt="Wayang Kulit">
+                    <div class="title">Wayang Kulit</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/gamelan.jpg" alt="Gamelan">
+                    <div class="title">Gamelan</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/sendratari.jpg" alt="Sendratari">
+                    <div class="title">Sendratari Ramayana</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/tarigolek.jpeg" alt="Tari Golek">
+                    <div class="title">Tari Golek</div>
+                </div>
+                <div class="trip-item">
+                    <img src="images/pakaianadat.jpg" alt="Pakaian Gaya Jogja">
+                    <div class="title">Pakaian Gaya Jogja</div>
+                </div>
+            </div>
+            <a href="#" class="button" onclick="showContent('home-section')">Back to Home</a>
+        </section>
+
+        <!-- Feedback Section -->
+        <section class="content" id="feedback-section">
+            <h1>Your Feedback</h1>
+            <form id="feedbackForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+                <button type="submit" class="button">Submit Feedback</button>
+            </form>
+            <a href="#" class="button" onclick="showContent('home-section')">Back to Home</a>
+        </section>
+    </main>
+
+    <footer>
+        &copy; Learning Labs 2024 L0224027 Yoeke Sekti Pertiwi
+    </footer>
+
+    <script>
+        function showContent(sectionId) {
+            const sections = document.querySelectorAll(".content");
+            sections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === sectionId) {
+                    section.classList.add('active');
+                }
+            });
+        }
+
+        // Handle feedback form submission
+        document.getElementById('feedbackForm')?.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            alert(`Thank you, ${name}! Your feedback has been received: "${message}"`);
+            this.reset();
+        });
+    </script>
+</body>
+</html>
